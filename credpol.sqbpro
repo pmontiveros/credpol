@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="S:/Users/Pablo/Source/Repos/llm-rscore-pol/kuak1/credpol.db" readonly="1" foreign_keys="" case_sensitive_like="" temp_store="" wal_autocheckpoint="" synchronous=""/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1702"/><column_width id="4" width="0"/></tab_structure><tab_browse><current_table name="0,0:"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">ALTER TABLE prompt_responses
+ADD COLUMN request_type TEXT DEFAULT 'Consulta políticas';</sql><sql name="SQL 2">select count(*)from indicadores </sql><sql name="SQL 3">SELECT
+	D.Indicador,
+	SUM(D.value) value
+FROM (
+	SELECT 
+		CAST(strftime('%s',fechaRegistro,'-1 minute') as INTEGER) as time,
+		Indicador,
+		tValor Estado,
+		iValor as value 
+	FROM indicadores
+) D
+WHERE 
+	Estado='Error'
+	--AND D.time &gt;= $__from / 1000 and D.time &lt; $__to / 1000
+GROUP BY 
+	D.Indicador</sql><sql name="SQL 4">
+select 
+CAST(strftime('%s',start_time,'-1 minute') as INTEGER) as time, 
+sentiment_score
+from prompt_responses
+where start_time is not null
+order by start_time</sql><sql name="SQL 5">SELECT 
+	sentiment_category,
+	sum(cnt) cnt
+FROM (
+SELECT 
+    1 cnt,
+    CASE
+        WHEN sentiment_score BETWEEN -1 AND -0.65 THEN 'Muy Negativo'
+        WHEN sentiment_score BETWEEN -0.65 AND -0.05 THEN 'Negativo'
+        WHEN sentiment_score BETWEEN -0.05 AND 0.05 THEN 'Neutro'
+        WHEN sentiment_score BETWEEN 0.05 AND 0.65 THEN 'Positivo'
+        WHEN sentiment_score BETWEEN 0.65 AND 1 THEN 'Muy Positivo'
+    END AS sentiment_category
+FROM 
+    prompt_responses
+) C
+GROUP BY 
+	C.sentiment_category;</sql><sql name="SQL 6">select * from msg_chanel</sql><sql name="SQL 7">INSERT INTO msg_chanel (chanel) VALUES ('webmsg')
+
+select * from msg_chanel;
+
+select * from prompt_responses;
+
+update prompt_responses
+set request_type='Reclamo'
+where prompt_uuid= '2c003a22-c04f-4c4e-b9d7-a1a69afeef63';
+
+update msg_chanel
+set chanel='whatsapp'
+where chanel='w';
+
+
+insert into msg_chanel (chanel)
+select
+'otros' as chanel
+from prompt_responses
+limit 5;
+
+select
+count(1) as cnt,
+chanel
+from msg_chanel
+group by chanel;
+
+select
+count(1) as cnt,
+request_type
+from prompt_responses
+group by request_type;</sql><sql name="SQL 8">SELECT
+	CAST(strftime('%s',fechaRegistro,'-1 minute') as INTEGER) as time,
+	Indicador as Servicio,
+	iValor as Last
+FROM indicadores
+WHERE 
+	Indicador IN('Messaging service status','Llm service status')
+	--AND D.time &gt;= $__from / 1000 and D.time &lt; $__to / 1000
+ORDER BY IDX ASC;
+--LIMIT 1000;</sql><current_tab id="6"/></tab_sql></sqlb_project>
