@@ -1,0 +1,5 @@
+flask
+requests
+conda-forge::llama-cpp-python
+conda-forge::twilio
+textblob
