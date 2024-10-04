@@ -3,6 +3,7 @@ from datetime import datetime
 import sqlite3
 import logging
 import requests
+import os
 
 app = Flask(__name__)
 
@@ -14,11 +15,15 @@ STATUS_CHECK_URL = "http://localhost:8081/status"
 INDEX_PATH = "index.html"
 SQLLite_DB_NAME = 'credpol.db'
 
+wd = os.getcwd()
+
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
+print('Directorio: ',wd)
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
+logging.info('Working Directory: %s', wd)
 
 # Funciónes para crear y manipular el repositorio de series temporales
 def setup_repo():
