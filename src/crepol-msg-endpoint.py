@@ -38,7 +38,7 @@ log.setLevel(logging.ERROR)
 logging.basicConfig(level=logging.INFO)
 
 MSG_TIME_OUT=120
-MSG_SERVICE_PORT = 81
+MSG_SERVICE_PORT = 8081
 MSG_SERVICE_DEBUG = True
 LLM_SERVICE_URL = "http://localhost:5001/generate"  # URL del servicio LLM
 SQLLite_DB_NAME = 'credpol.db'
