@@ -6,7 +6,7 @@ model_name = "pablomo83/Llama-3-credpolF"
 #model_file = "Llama-3-credpol-unsloth.Q8_0.gguf" # this is the specific model file we'll use in this example. It's a 4-bit quant, but other levels of quantization are available in the model repo if preferred
 model_file = "Llama3_credpol-unsloth.Q4_K_M.gguf"
 ## model_path = "S:\\Users\\Pablo\\Source\\Repos\\llm-rscore-pol\\kuak1\\models\\pablomo83\\Llama-3-credpol\\unsloth.Q8_0.gguf"
-model_path = f"~/credpol/model/Llama3_credpol/{model_file}"
+model_path = f"./credpol/model/Llama3_credpol/{model_file}"
 
 
 stop_token = "\n"
