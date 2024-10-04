@@ -20,14 +20,15 @@ import random
 #import redis
 import os
 import sqlite3
+from cfg.credentials import TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN
 
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 4096
 app.config['JSON_AS_ASCII'] = False
 
-account_sid = ''
-auth_token = ''
+account_sid = TWILIO_ACCOUNT_SID
+auth_token = TWILIO_AUTH_TOKEN
 client = Client(account_sid, auth_token)
 
 log = logging.getLogger('werkzeug')
