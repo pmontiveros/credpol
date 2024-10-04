@@ -12,7 +12,7 @@ MESSAGING_SERVICE_URL = "http://localhost:8081/webmsg"
 LLM_SERVICE_URL = "http://localhost:5001/ping"
 MESSAGING_SERVICE_PING_URL = "http://localhost:8081/ping"
 STATUS_CHECK_URL = "http://localhost:8081/status"
-INDEX_PATH = "templates/index.html"
+INDEX_PATH = "index.html"
 SQLLite_DB_NAME = 'credpol.db'
 
 wd = os.getcwd()
