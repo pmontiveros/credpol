@@ -89,5 +89,49 @@ def generate_response():
         traceback.print_exc()  # Imprimir el traceback completo en la terminal
         return jsonify({"response": "Ha ocurrido un error al generar la respuesta."}), 500
 
+@app.route("/classifier", methods=['POST'])
+def generate_classification():
+    try:
+        data = request.json
+        incoming_msg = data.get("prompt", "").strip()
+        prompt = f'Eres Clasificador de preguntas. Debes identificar si la pregunta corresponde con una Solicitud de Crédito, o una Consulta General de las politicas de Credito o es un reclamo. Tu resupuesta será: "Solicitud Crédito" si la persona pide unidades de cariño o esta interesada en conseguir créditos; "Reclamo" Si la persona tuvo un problema con las unidades de cariño acreditadas, con el pago de se credito o con el saldo de sus pagos; Cualquier otra cosa se considera una Consulta General de las politicas de Credito y debes reposponder "Consulta políticas".\n ### Pregunta: {incoming_msg}\n ### Respuesta:'
+        
+        if prompt:
+            response = llm(prompt, **generation_kwargs)  ## llama_cpp.generate(model, prompt=incoming_msg) ## llm(prompt, **generation_kwargs)
+            # Extraer el texto generado del JSON
+            generated_text = response['choices'][0]['text']
+            response_clean = generated_text.replace(prompt, '').strip()
+            return jsonify({"response": response_clean})
+        else:
+            return jsonify({"response": "No se recibió un prompt válido."}), 400
+    except Exception as e:
+        logging.error("Error en /generate: %s", e)
+        print("Error")
+        traceback.print_exc()  # Imprimir el traceback completo en la terminal
+        return jsonify({"response": "Ha ocurrido un error al generar la respuesta."}), 500
+
+
+@app.route("/sentiment", methods=['POST'])
+def sentiment():
+    try:
+        data = request.json
+        incoming_msg = data.get("prompt", "").strip()
+        prompt = f'Eres un analizador de sentimiento de preguntas. Debes identificar enojo o felicidad y responder con un valor entre -1 y 1. No puedes reponder con palabras solo con esos valores. Tu respuesta será: un valor entre "0.1" y "0.33" si en la pregunta hay términos positivos como "bueno", "genial", "excelente", "me gusta"; un valor entre "0.33" y "0.99" si utiliza términos muy positivos como "muy bueno", "super genial", "¡¡excelente!!", "me gusta Mucho" o equivalente;un valor entre "-0.33" y "-0.1" si utiliza términos negativos como "no me gusta", "malo", "Problema";un valor entre "-0.99" y "-0.34" si utiliza términos muy negativos como "enojado", "muy malo", "gran problema" o equivalente; Finalmente si no corresponde con las anteriores, entonces es un comentario neutro y debe tener valor entre "-0.1" y "0.1" a criterio.\n ### Pregunta: {incoming_msg}\n ### Respuesta:'
+        
+        if prompt:
+            response = llm(prompt, **generation_kwargs)  ## llama_cpp.generate(model, prompt=incoming_msg) ## llm(prompt, **generation_kwargs)
+            # Extraer el texto generado del JSON
+            generated_text = response['choices'][0]['text']
+            response_clean = generated_text.replace(prompt, '').strip()
+            return jsonify({"response": response_clean})
+        else:
+            return jsonify({"response": "No se recibió un prompt válido."}), 400
+    except Exception as e:
+        logging.error("Error en /generate: %s", e)
+        print("Error")
+        traceback.print_exc()  # Imprimir el traceback completo en la terminal
+        return jsonify({"response": "Ha ocurrido un error al generar la respuesta."}), 500
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=LLM_SERVICE_PORT)
