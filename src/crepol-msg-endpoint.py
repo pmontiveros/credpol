@@ -227,7 +227,7 @@ def long_running_task(prompt_uuid, prompt):
         response_data = response.json()
         response_text = response_data.get('response', 'No se pudo generar una respuesta.')
         logging.info("llm long_running_task response_text para /whatsapp prompt_uuid %s: %s", prompt_uuid, response_text)
-    except exceptions.RequestException as e:
+    except requests.RequestException as e:
         logging.error("Error al llamar al servicio LLM: %s", e)
         response_text = "Error al procesar la solicitud."
     
@@ -307,7 +307,7 @@ def webmsg_reply():
 def check_status():
     try:
         uuid_str = request.json.get('uuid', '').strip()
-
+        results = []
         if uuid_str in results:
             response_text = results.pop(uuid_str)
         else:
