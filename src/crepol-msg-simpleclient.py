@@ -7,6 +7,8 @@ import os
 
 app = Flask(__name__)
 
+CLIENT_SERVICE_PORT = 5002
+
 # URLs de los servicios
 MESSAGING_SERVICE_URL = "http://localhost:8081/webmsg"
 LLM_SERVICE_URL = "http://localhost:5001/ping"
@@ -23,7 +25,7 @@ log.setLevel(logging.ERROR)
 print('Directorio: ',wd)
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
-logging.info('Working Directory: %s', wd)
+#logging.info('Working Directory: %s', wd)
 
 # Funciónes para crear y manipular el repositorio de series temporales
 def setup_repo():
@@ -102,4 +104,4 @@ def service_status():
     })
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5002)
+    app.run(host='0.0.0.0', port=CLIENT_SERVICE_PORT)

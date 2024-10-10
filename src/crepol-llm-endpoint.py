@@ -6,7 +6,9 @@ model_name = "pablomo83/Llama-3-credpolF"
 #model_file = "Llama-3-credpol-unsloth.Q8_0.gguf" # this is the specific model file we'll use in this example. It's a 4-bit quant, but other levels of quantization are available in the model repo if preferred
 model_file = "Llama3_credpol-unsloth.Q4_K_M.gguf"
 ## model_path = "S:\\Users\\Pablo\\Source\\Repos\\llm-rscore-pol\\kuak1\\models\\pablomo83\\Llama-3-credpol\\unsloth.Q8_0.gguf"
-model_path = f"./credpol/model/Llama3_credpol/{model_file}"
+model_path = f"./model/Llama3_credpol/{model_file}"
+
+prompt_path = './src/cfg/prompt.txt'
 
 
 stop_token = "\n"
@@ -68,12 +70,38 @@ def handle_exception(e):
 def ping():
     return "El servicio de LLM está vivo!"
 
+@app.route("/identify", methods=['POST'])
+def generate_response():
+    try:
+        data = request.json
+        incoming_msg = data.get("prompt", "").strip()
+
+        prompt = f'Eres un clasificador encargado de dada una cadena de caracteres asimilar la cadena "", debes responder la siguiente pregunta con el identificador de la cuenta \n ### Pregunta: {incoming_msg}\n ### Respuesta:'
+        
+        if prompt:
+            response = llm(prompt, **generation_kwargs)  ## llama_cpp.generate(model, prompt=incoming_msg) ## llm(prompt, **generation_kwargs)
+            # Extraer el texto generado del JSON
+            generated_text = response['choices'][0]['text']
+            response_clean = generated_text.replace(prompt, '').strip()
+            return jsonify({"response": response_clean})
+        else:
+            return jsonify({"response": "No se recibió un prompt válido."}), 400
+    except Exception as e:
+        logging.error("Error en /generate: %s", e)
+        print("Error")
+        traceback.print_exc()  # Imprimir el traceback completo en la terminal
+        return jsonify({"response": "Ha ocurrido un error al generar la respuesta."}), 500
+
 @app.route("/generate", methods=['POST'])
 def generate_response():
     try:
         data = request.json
         incoming_msg = data.get("prompt", "").strip()
-        prompt = f'Eres un ChatBot asistente de Kuak S.A., una firma multinacional de servicios de auditoría, consultoría y advisory con 80000 empleados alrededor del mundo. Esta compañía imaginaría implementa las unidades de cariño como un sistema complementario de recompensas y bonificaciones. De manera estándar, la compañía otorga a sus empleados 3 unidades de cariño por hora a empleados que prestan servicios en proyectos facturables a terceros, 2 unidades de cariño por hora a quienes prestan servicios en proyectos internos de valor agregado o funciones directivas y una unidad de cariño por cada hora trabajo en tareas administrativas o no facturables. Los jefes también pueden otorgar una cantidad acotadas de unidades de cariño como forma de recompensa para promover la innovación de la práctica en servicios calves o estratégicos. Además, Kuak, implementa una novedosa política de crédito donde los empleados pueden pedir unidades de cariño a crédito, dependiendo el destino tendrán un interés variable. Si el destino de las unidades de cariño es de uso personal, como ser, intercambiar las unidades de cariño por horas libres, adelanto de sueldo, vacaciones extra entonces tendran interés. Si en cambio tiene un destino profesional que tambien beneficia a la compañía, como por ejemplo becas en el sistema educativo de cada país, certificaciones profesionales, acceso a curso, entonces serán libre de interés. A continuación te haran una pregunta y tu daras tu mejor Respuesta.\n ### Pregunta: {incoming_msg}\n ### Respuesta:'
+
+        root_prompt = ''
+        with open(prompt_path, 'r') as f:
+            root_prompt = f.readlines()
+        prompt = f'{root_prompt}\n ### Pregunta: {incoming_msg}\n ### Respuesta:'
         
         if prompt:
             response = llm(prompt, **generation_kwargs)  ## llama_cpp.generate(model, prompt=incoming_msg) ## llm(prompt, **generation_kwargs)
