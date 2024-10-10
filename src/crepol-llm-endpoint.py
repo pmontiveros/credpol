@@ -101,7 +101,8 @@ def generate_response():
         root_prompt = ''
         with open(prompt_path, 'r') as f:
             root_prompt = f.readlines()
-        prompt = f'{root_prompt}\n ### Pregunta: {incoming_msg}\n ### Respuesta:'
+        #prompt = f'{root_prompt}\n ### Pregunta: {incoming_msg}\n ### Respuesta:'
+        prompt = f'{root_prompt}\n\n ¿A cual de las categorias pertenece el texto: "{incoming_msg}"?'
         
         if prompt:
             response = llm(prompt, **generation_kwargs)  ## llama_cpp.generate(model, prompt=incoming_msg) ## llm(prompt, **generation_kwargs)
