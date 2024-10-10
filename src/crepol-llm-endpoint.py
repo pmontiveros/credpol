@@ -71,7 +71,7 @@ def ping():
     return "El servicio de LLM está vivo!"
 
 @app.route("/identify", methods=['POST'])
-def generate_response():
+def identify_response():
     try:
         data = request.json
         incoming_msg = data.get("prompt", "").strip()
@@ -87,7 +87,7 @@ def generate_response():
         else:
             return jsonify({"response": "No se recibió un prompt válido."}), 400
     except Exception as e:
-        logging.error("Error en /generate: %s", e)
+        logging.error("Error en /identify: %s", e)
         print("Error")
         traceback.print_exc()  # Imprimir el traceback completo en la terminal
         return jsonify({"response": "Ha ocurrido un error al generar la respuesta."}), 500
@@ -133,7 +133,7 @@ def generate_classification():
         else:
             return jsonify({"response": "No se recibió un prompt válido."}), 400
     except Exception as e:
-        logging.error("Error en /generate: %s", e)
+        logging.error("Error en /classifier: %s", e)
         print("Error")
         traceback.print_exc()  # Imprimir el traceback completo en la terminal
         return jsonify({"response": "Ha ocurrido un error al generar la respuesta."}), 500
@@ -155,7 +155,7 @@ def sentiment():
         else:
             return jsonify({"response": "No se recibió un prompt válido."}), 400
     except Exception as e:
-        logging.error("Error en /generate: %s", e)
+        logging.error("Error en /sentiment: %s", e)
         print("Error")
         traceback.print_exc()  # Imprimir el traceback completo en la terminal
         return jsonify({"response": "Ha ocurrido un error al generar la respuesta."}), 500
