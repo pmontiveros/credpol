@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], button {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .response, .status-response, .service-status {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        let timer;
+        let startTime;
+
+        function startTimer() {
+            startTime = Date.now();
+            timer = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            document.getElementById("timer").innerText = `Tiempo transcurrido: ${elapsed} segundos`;
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+            document.getElementById("timer").innerText = "";
+        }
+
+        async function sendMessage() {
+            const message = document.getElementById("message").value;
+            startTimer();
+            const response = await fetch("/send_message", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ message: message })
+            });
+            const data = await response.json();
+            document.getElementById("response").innerText = data.response;
+            stopTimer();
+        }
+
+        async function checkStatus() {
+            const uuid = document.getElementById("uuid").value;
+            const response = await fetch("/check_status", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ uuid: uuid })
+            });
+            const data = await response.json();
+            document.getElementById("status_response").innerText = data.response;
+        }
+
+        async function checkServiceStatus() {
+            const response = await fetch("/service_status");
+            const data = await response.json();
+            document.getElementById("messaging_service_status").innerText = data.messaging_service_status;
+            document.getElementById("llm_service_status").innerText = data.llm_service_status;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("message").value = "Hola, ¿Qué son las Unidades de Cariño?";
+            checkServiceStatus();
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Chat Client</h1>
+        <div class="form-group">
+            <label for="message">Mensaje:</label>
+            <input type="text" id="message" value="Hola, ¿Qué son las Unidades de Cariño?">
+            <button onclick="sendMessage()">Enviar</button>
+        </div>
+        <div id="timer" class="form-group"></div>
+        <div class="response form-group">
+            <h2>Respuesta:</h2>
+            <p id="response"></p>
+        </div>
+        <div class="form-group">
+            <label for="uuid">UUID:</label>
+            <input type="text" id="uuid">
+            <button onclick="checkStatus()">Verificar Estado</button>
+        </div>
+        <div class="status-response form-group">
+            <h2>Respuesta del Estado:</h2>
+            <p id="status_response"></p>
+        </div>
+        <div class="service-status form-group">
+            <h2>Estado del Servicio:</h2>
+            <p>Servicio de Mensajería: <span id="messaging_service_status"></span></p>
+            <p>Servicio LLM: <span id="llm_service_status"></span></p>
+            <button onclick="checkServiceStatus()">Actualizar Estado</button>
+        </div>
+    </div>
+</body>
+</html>
