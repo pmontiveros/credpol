@@ -1,0 +1,840 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "cabaa0b3-7000-4ee5-9d30-03b30e4da4c5"
+      },
+      "description": "Sentimiento general del usuario",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "Promedio",
+          "mappings": [],
+          "max": 1,
+          "min": -1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              },
+              {
+                "color": "dark-orange",
+                "value": -0.65
+              },
+              {
+                "color": "dark-yellow",
+                "value": -0.35
+              },
+              {
+                "color": "text",
+                "value": -0.05
+              },
+              {
+                "color": "super-light-green",
+                "value": 0.05
+              },
+              {
+                "color": "green",
+                "value": 0.35
+              },
+              {
+                "color": "dark-green",
+                "value": 0.65
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "10.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "cabaa0b3-7000-4ee5-9d30-03b30e4da4c5"
+          },
+          "queryText": "select \nCAST(strftime('%s',start_time,'-1 minute') as INTEGER) as time, \nsentiment_score\nfrom prompt_responses\nwhere start_time is not null\norder by start_time",
+          "queryType": "time series",
+          "rawQueryText": "select \nCAST(strftime('%s',start_time,'-1 minute') as INTEGER) as time, \nsentiment_score\nfrom prompt_responses\nwhere start_time is not null\norder by start_time",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Sentimiento",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "cabaa0b3-7000-4ee5-9d30-03b30e4da4c5"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 3,
+        "x": 6,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "cabaa0b3-7000-4ee5-9d30-03b30e4da4c5"
+          },
+          "queryText": "select \ncount(1) Preguntas\nfrom prompt_responses",
+          "queryType": "table",
+          "rawQueryText": "select \ncount(1) Preguntas\nfrom prompt_responses",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Preguntas",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "cabaa0b3-7000-4ee5-9d30-03b30e4da4c5"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 5,
+        "x": 9,
+        "y": 0
+      },
+      "id": 11,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "/^cnt$/",
+          "values": true
+        },
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "10.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "cabaa0b3-7000-4ee5-9d30-03b30e4da4c5"
+          },
+          "queryText": "select\ncount(1) as cnt,\nrequest_type\nfrom prompt_responses\ngroup by request_type;",
+          "queryType": "table",
+          "rawQueryText": "select\ncount(1) as cnt,\nrequest_type\nfrom prompt_responses\ngroup by request_type;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Panel Title",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "cabaa0b3-7000-4ee5-9d30-03b30e4da4c5"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Positivo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Muy Positivo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Muy Negativo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Negativo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Neutro"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "text",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 10,
+        "x": 14,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "displayLabels": [
+          "percent"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true,
+          "values": []
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "cabaa0b3-7000-4ee5-9d30-03b30e4da4c5"
+          },
+          "queryText": "SELECT \n\tsentiment_category,\n\tsum(cnt) cnt\nFROM (\nSELECT \n    1 cnt,\n    CASE\n        WHEN sentiment_score BETWEEN -1 AND -0.65 THEN 'Muy Negativo'\n        WHEN sentiment_score BETWEEN -0.65 AND -0.05 THEN 'Negativo'\n        WHEN sentiment_score BETWEEN -0.05 AND 0.05 THEN 'Neutro'\n        WHEN sentiment_score BETWEEN 0.05 AND 0.65 THEN 'Positivo'\n        WHEN sentiment_score BETWEEN 0.65 AND 1 THEN 'Muy Positivo'\n    END AS sentiment_category\nFROM \n    prompt_responses\n) C\nGROUP BY \n\tC.sentiment_category;",
+          "queryType": "table",
+          "rawQueryText": "SELECT \n\tsentiment_category,\n\tsum(cnt) cnt\nFROM (\nSELECT \n    1 cnt,\n    CASE\n        WHEN sentiment_score BETWEEN -1 AND -0.65 THEN 'Muy Negativo'\n        WHEN sentiment_score BETWEEN -0.65 AND -0.05 THEN 'Negativo'\n        WHEN sentiment_score BETWEEN -0.05 AND 0.05 THEN 'Neutro'\n        WHEN sentiment_score BETWEEN 0.05 AND 0.65 THEN 'Positivo'\n        WHEN sentiment_score BETWEEN 0.65 AND 1 THEN 'Muy Positivo'\n    END AS sentiment_category\nFROM \n    prompt_responses\n) C\nGROUP BY \n\tC.sentiment_category;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Apertura Sentimiento",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "cabaa0b3-7000-4ee5-9d30-03b30e4da4c5"
+      },
+      "description": "Tiempo de Respuesta del LLM",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "Segundos",
+          "mappings": [],
+          "max": 25,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "dark-yellow",
+                "value": 7
+              },
+              {
+                "color": "dark-red",
+                "value": 14
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 3,
+        "x": 6,
+        "y": 7
+      },
+      "id": 7,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "10.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "cabaa0b3-7000-4ee5-9d30-03b30e4da4c5"
+          },
+          "queryText": "select \nAVG((strftime('%s', end_time) - strftime('%s', start_time))) AS [Tiempo respuesta]\nfrom prompt_responses",
+          "queryType": "table",
+          "rawQueryText": "select \nAVG((strftime('%s', end_time) - strftime('%s', start_time))) AS [Tiempo respuesta]\nfrom prompt_responses",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Tiempo de Respuesta",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "cabaa0b3-7000-4ee5-9d30-03b30e4da4c5"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic-by-name"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-yellow",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 10,
+        "x": 14,
+        "y": 10
+      },
+      "id": 10,
+      "options": {
+        "displayMode": "lcd",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "/^cnt$/",
+          "values": true
+        },
+        "showUnfilled": true,
+        "valueMode": "color"
+      },
+      "pluginVersion": "10.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "cabaa0b3-7000-4ee5-9d30-03b30e4da4c5"
+          },
+          "queryText": "select\ncount(1) as cnt,\nchanel\nfrom msg_chanel\ngroup by chanel;",
+          "queryType": "table",
+          "rawQueryText": "select\ncount(1) as cnt,\nchanel\nfrom msg_chanel\ngroup by chanel;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Apertura por canal",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "cabaa0b3-7000-4ee5-9d30-03b30e4da4c5"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "1": {
+                  "index": 0,
+                  "text": "OK"
+                },
+                "-1": {
+                  "index": 1,
+                  "text": "Stoped"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": -1
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 0,
+        "y": 15
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "cabaa0b3-7000-4ee5-9d30-03b30e4da4c5"
+          },
+          "queryText": "SELECT\n\tCAST(strftime('%s',fechaRegistro,'-1 minute') as INTEGER) as time,\n\tIndicador as Servicio,\n\tiValor as Last\nFROM indicadores\nWHERE \n\tIndicador IN('Messaging service status','Llm service status')\n\t--AND D.time >= $__from / 1000 and D.time < $__to / 1000\nORDER BY IDX ASC;\n--LIMIT 1000;",
+          "queryType": "time series",
+          "rawQueryText": "SELECT\n\tCAST(strftime('%s',fechaRegistro,'-1 minute') as INTEGER) as time,\n\tIndicador as Servicio,\n\tiValor as Last\nFROM indicadores\nWHERE \n\tIndicador IN('Messaging service status','Llm service status')\n\t--AND D.time >= $__from / 1000 and D.time < $__to / 1000\nORDER BY IDX ASC;\n--LIMIT 1000;",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "Estado de los servicios",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "cabaa0b3-7000-4ee5-9d30-03b30e4da4c5"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Errores"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Ok"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 16,
+        "x": 8,
+        "y": 15
+      },
+      "id": 5,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.87,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "always",
+        "stacking": "percent",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "10.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "cabaa0b3-7000-4ee5-9d30-03b30e4da4c5"
+          },
+          "queryText": "SELECT\n\tD.Indicador,\n\tSUM(D.Ok) Ok,\n\tSUM(D.Error) Errores\nFROM (\n\tSELECT \n\t\tCAST(strftime('%s',fechaRegistro,'-1 minute') as INTEGER) as time,\n\t\tIndicador,\n\t\tCASE WHEN iValor > 0 THEN 1 ELSE 0 END as Ok,\n\t\tCASE WHEN iValor < 0 THEN 1 ELSE 0 END as Error,\n\t\tABS(iValor) Total\n\tFROM indicadores\n) D\nWHERE D.time >= $__from / 1000 and D.time < $__to / 1000\nGROUP BY \n\tD.Indicador",
+          "queryType": "table",
+          "rawQueryText": "SELECT\n\tD.Indicador,\n\tSUM(D.Ok) Ok,\n\tSUM(D.Error) Errores\nFROM (\n\tSELECT \n\t\tCAST(strftime('%s',fechaRegistro,'-1 minute') as INTEGER) as time,\n\t\tIndicador,\n\t\tCASE WHEN iValor > 0 THEN 1 ELSE 0 END as Ok,\n\t\tCASE WHEN iValor < 0 THEN 1 ELSE 0 END as Error,\n\t\tABS(iValor) Total\n\tFROM indicadores\n) D\nWHERE D.time >= $__from / 1000 and D.time < $__to / 1000\nGROUP BY \n\tD.Indicador",
+          "refId": "A",
+          "timeColumns": [
+            "time",
+            "ts"
+          ]
+        }
+      ],
+      "title": "SLA",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 19
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "title": "Uso de recursos",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "CredPol",
+  "uid": "b8c579c2-1a6d-4254-9488-1cb8c4a48f93",
+  "version": 14,
+  "weekStart": ""
+}
